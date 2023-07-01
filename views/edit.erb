@@ -1,0 +1,15 @@
+<h3>メモ<%= @id %></h3>
+<form method="post" action="/memos/<%= @id %>">
+  <label>メモ名 </label><br>
+  <input type="text" name="name" value="<%= @name %>" class="name_form"><br>
+  <label>内容</label><br>
+  <textarea name="text" class="text_form"><%= @text %></textarea><br>
+  <input type="submit" class="button change" value="変更">
+  <input type="hidden" name="id" value="<%= @id %>">
+  <input type="hidden" name="_method" value="patch">
+</form>
+<form method="post" action="/memos/<%= @id %>">
+  <input type="submit" value="削除" class="button delete">
+  <input type="hidden" name="id" value="<%= @id %>">
+  <input type="hidden" name="_method" value="delete">
+</form>

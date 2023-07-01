@@ -1,0 +1,9 @@
+<ul>
+  <% @memos.each do |memo| %>
+  <li>
+    <a href="/memos/<%= memo[:id] %>">メモ<%= memo[:id] %>：<%= memo[:name] %></a>
+  </li>
+  <% end %>
+</ul>
+
+<button type="button" onclick="location.href='/memos/new'">追加</button>
