@@ -10,7 +10,7 @@ end
 
 def any_data?
   data = parse_json_data
-  data[:memos].empty? ? false : true
+  !data[:memos].empty?
 end
 
 def parse_all_data
