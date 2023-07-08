@@ -57,10 +57,6 @@ class Memo
     @text = CGI.escapeHTML(text)
     @id = set_id
   end
-  name = '<h1>suzuka'
-  text = 'text'
-  @name = CGI.escapeHTML(name)
-  @text = CGI.escapeHTML(text)
 
   def set_id
     if any_data?
