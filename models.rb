@@ -22,12 +22,8 @@ def delete_memo_data(id)
   end
 end
 
-def symbolize_keys(hash)
-  hash.map{|key,value| [key.to_sym, value] }.to_h
-end
-
 def edit_memo_data(params)
-  symbolize_params = symbolize_keys(params) #確認
+  symbolize_params = params.transform_keys(&:to_sym)
   id = symbolize_params[:id]
   all_data = parse_all_data
   all_data.each do |memo|
@@ -42,16 +38,16 @@ end
 
 def set_id
   data = parse_all_data
-  if data.empty?
-    last_id = 0
-  else
-    last_id = data[-1][:id]
-  end
+  last_id = if data.empty?
+              0
+            else
+              data[-1][:id]
+            end
   last_id + 1
 end
 
 def add_new_memo(params)
-  symbolize_params = symbolize_keys(params)
+  symbolize_params = params.transform_keys(&:to_sym)
   id = set_id
   data = parse_all_data
   data.push({ name: symbolize_params[:name], text: symbolize_params[:text], id: })
