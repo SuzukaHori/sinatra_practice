@@ -3,65 +3,60 @@
 require 'json'
 require 'cgi'
 
-def parse_json_data
-  original_data = File.read('db.json')
-  JSON.parse(original_data, symbolize_names: true)
-end
-
-def any_data?
-  data = parse_json_data
-  !data[:memos].empty?
-end
-
 def parse_all_data
-  if any_data?
-    data = parse_json_data
-    data[:memos]
-  else
-    []
-  end
+  original_data = File.read('db.json')
+  data = JSON.parse(original_data, symbolize_names: true)
+  data[:memos] || []
 end
 
 def find_memo_data(id)
-  data = parse_json_data
-  data[:memos].find { |memo| memo[:id] == id }
+  all_data = parse_all_data
+  all_data.find { |memo| memo[:id] == id }
 end
 
 def delete_memo_data(id)
-  old_data = parse_json_data
-  new_data = { "memos" => old_data[:memos].reject { |memo| memo[:id] == id } }
-  File.open("db.json", "w") do |file|
+  old_data = parse_all_data
+  new_data = { 'memos' => old_data.reject { |memo| memo[:id] == id } }
+  File.open('db.json', 'w') do |file|
     file.write(JSON.pretty_generate(new_data))
   end
 end
 
-def edit_memo_data(params)
-  data = parse_json_data
-  data[:memos].map do |memo|
-    if memo[:id] == params[:id]
-      memo[:text] = CGI.escapeHTML(params[:text])
-      memo[:name] = CGI.escapeHTML(params[:name])
-    end
-  end
-
-  File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(data)) }
+def symbolize_keys(hash)
+  hash.map{|key,value| [key.to_sym, value] }.to_h
 end
 
-def add_new_memo(params)
-  id = set_id
-  json_data = (any_data? ? JSON.parse(File.read("db.json")) : { "memos" => [] })
-  json_data["memos"].push({ "name" => params[:name], "text" => params[:text], "id" => id })
-  File.open("db.json", "w") do |file|
-    file.puts(JSON.pretty_generate(json_data))
+def edit_memo_data(params)
+  symbolize_params = symbolize_keys(params) #確認
+  id = symbolize_params[:id]
+  all_data = parse_all_data
+  all_data.each do |memo|
+    if memo[:id] == id.to_i
+      memo[:name] = symbolize_params[:name]
+      memo[:text] = symbolize_params[:text]
+    end
   end
+  new_data = { memos: all_data }
+  File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(new_data)) }
 end
 
 def set_id
-  if any_data?
-    data = parse_json_data
-    last_id = data[:memos][-1][:id]
-  else
+  data = parse_all_data
+  if data.empty?
     last_id = 0
+  else
+    last_id = data[-1][:id]
   end
   last_id + 1
+end
+
+def add_new_memo(params)
+  symbolize_params = symbolize_keys(params)
+  id = set_id
+  data = parse_all_data
+  data.push({ name: symbolize_params[:name], text: symbolize_params[:text], id: })
+  new_data = { memos: data }
+  File.open('db.json', 'w') do |file|
+    file.puts(JSON.pretty_generate(new_data))
+  end
 end

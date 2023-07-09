@@ -28,6 +28,8 @@ get '/memos/:id/edit' do
   @title = 'edit'
   found_data = find_memo_data(params[:id].to_i)
   @id = found_data[:id]
+  @name = found_data[:name]
+  @text = found_data[:text]
   erb :edit
 end
 
