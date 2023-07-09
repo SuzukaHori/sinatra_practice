@@ -20,8 +20,7 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  memo = Memo.new(name: params[:name], text: params[:text])
-  memo.save_new_memo
+  add_new_memo(name: params[:name], text: params[:text])
   redirect '/memos'
 end
 

@@ -31,8 +31,8 @@ end
 
 def delete_memo_data
   old_data = parse_json_data
-  new_data = { 'memos' => old_data[:memos].reject { |memo| memo[:id] == @id } }
-  File.open('db.json', 'w') do |file|
+  new_data = { "memos" => old_data[:memos].reject { |memo| memo[:id] == @id } }
+  File.open("db.json", "w") do |file|
     file.write(JSON.pretty_generate(new_data))
   end
 end
@@ -49,31 +49,23 @@ def edit_memo_data
   File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(data)) }
 end
 
-class Memo
-  attr_accessor :name, :text, :id
-
-  def initialize(name:, text:)
-    @name = CGI.escapeHTML(name)
-    @text = CGI.escapeHTML(text)
-    @id = set_id
+def add_new_memo(name:, text:)
+  @name = name
+  @text = text
+  @id = set_id
+  json_data = (any_data? ? JSON.parse(File.read("db.json")) : { "memos" => [] })
+  json_data["memos"].push({ "name" => @name, "text" => @text, "id" => @id })
+  File.open("db.json", "w") do |file|
+    file.puts(JSON.pretty_generate(json_data))
   end
+end
 
-  def set_id
-    if any_data?
-      data = parse_json_data
-      last_id = data[:memos][-1][:id]
-    else
-      last_id = 0
-    end
-    last_id + 1
+def set_id
+  if any_data?
+    data = parse_json_data
+    last_id = data[:memos][-1][:id]
+  else
+    last_id = 0
   end
-
-  def save_new_memo
-    json_data =
-      (any_data? ? JSON.parse(File.read('db.json')) : { 'memos' => [] })
-    json_data['memos'].push({ 'name' => @name, 'text' => @text, 'id' => @id })
-    File.open('db.json', 'w') do |file|
-      file.puts(JSON.pretty_generate(json_data))
-    end
-  end
+  last_id + 1
 end
