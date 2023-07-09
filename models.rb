@@ -22,39 +22,35 @@ def parse_all_data
   end
 end
 
-def find_memo_data
+def find_memo_data(id)
   data = parse_json_data
-  found_data = data[:memos].find { |memo| memo[:id] == @id }
-  @name = found_data[:name]
-  @text = found_data[:text]
+  data[:memos].find { |memo| memo[:id] == id }
 end
 
-def delete_memo_data
+def delete_memo_data(id)
   old_data = parse_json_data
-  new_data = { "memos" => old_data[:memos].reject { |memo| memo[:id] == @id } }
+  new_data = { "memos" => old_data[:memos].reject { |memo| memo[:id] == id } }
   File.open("db.json", "w") do |file|
     file.write(JSON.pretty_generate(new_data))
   end
 end
 
-def edit_memo_data
+def edit_memo_data(params)
   data = parse_json_data
   data[:memos].map do |memo|
-    if memo[:id] == @id
-      memo[:text] = CGI.escapeHTML(@text)
-      memo[:name] = CGI.escapeHTML(@name)
+    if memo[:id] == params[:id]
+      memo[:text] = CGI.escapeHTML(params[:text])
+      memo[:name] = CGI.escapeHTML(params[:name])
     end
   end
 
   File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(data)) }
 end
 
-def add_new_memo(name:, text:)
-  @name = name
-  @text = text
-  @id = set_id
+def add_new_memo(params)
+  id = set_id
   json_data = (any_data? ? JSON.parse(File.read("db.json")) : { "memos" => [] })
-  json_data["memos"].push({ "name" => @name, "text" => @text, "id" => @id })
+  json_data["memos"].push({ "name" => params[:name], "text" => params[:text], "id" => id })
   File.open("db.json", "w") do |file|
     file.puts(JSON.pretty_generate(json_data))
   end

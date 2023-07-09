@@ -20,35 +20,33 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  add_new_memo(name: params[:name], text: params[:text])
+  add_new_memo(params)
   redirect '/memos'
 end
 
 get '/memos/:id/edit' do
   @title = 'edit'
-  @id = params[:id].to_i
-  find_memo_data
+  found_data = find_memo_data(params[:id].to_i)
+  @id = found_data[:id]
   erb :edit
 end
 
 get '/memos/:id' do
+  found_data = find_memo_data(params[:id].to_i)
   @title = 'detail'
-  @id = params[:id].to_i
-  find_memo_data
+  @id = found_data[:id]
+  @name = found_data[:name]
+  @text = found_data[:text]
   erb :detail
 end
 
 delete '/memos/:id' do
-  @id = params[:id].to_i
-  delete_memo_data
+  delete_memo_data(params[:id].to_i)
   redirect '/memos'
 end
 
 patch '/memos/:id' do
-  @name = params[:name]
-  @text = params[:text]
-  @id = params[:id].to_i
-  edit_memo_data
+  edit_memo_data(params)
   redirect '/memos'
 end
 
