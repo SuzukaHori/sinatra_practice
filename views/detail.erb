@@ -1,7 +1,7 @@
 <section>
   <h3>メモ<%= @id %></h3>
-  <p>メモ名： <%= @name %></p>
-  <p>メモの内容： <%= @text %></p>
+  <p>メモ名： <%= CGI.escapeHTML(@name) %></p>
+  <p>メモの内容： <%= CGI.escapeHTML(@text) %></p>
 </section>
 
 <div class="button wrapper">
