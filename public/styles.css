@@ -33,7 +33,14 @@ h2 {
   height: 120px;
 }
 
+.button.wrapper {
+  display: flex;
+}
+
 .button{
-  display: inline-block;
   margin-top: 8px;
+}
+
+a.button{
+  margin-right: 40px;
 }
