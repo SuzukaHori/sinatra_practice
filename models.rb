@@ -26,9 +26,9 @@ def edit_memo_data(params)
   symbolized_params = params.transform_keys(&:to_sym)
   all_data = parse_all_data
   all_data.each do |memo|
-    if memo[:id] == id.to_i
-      memo[:name] = symbolize_params[:name]
-      memo[:text] = symbolize_params[:text]
+    if memo[:id] == symbolized_params[:id].to_i
+      memo[:name] = symbolized_params[:name]
+      memo[:text] = symbolized_params[:text]
     end
   end
   new_data = { memos: all_data }
@@ -36,7 +36,7 @@ def edit_memo_data(params)
 end
 
 def set_id
-  all_data = parse_all_all_data
+  all_data = parse_all_data
   last_id = if all_data.empty?
               0
             else
