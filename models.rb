@@ -23,8 +23,7 @@ def delete_memo_data(id)
 end
 
 def edit_memo_data(params)
-  symbolize_params = params.transform_keys(&:to_sym)
-  id = symbolize_params[:id]
+  symbolized_params = params.transform_keys(&:to_sym)
   all_data = parse_all_data
   all_data.each do |memo|
     if memo[:id] == id.to_i
@@ -37,21 +36,21 @@ def edit_memo_data(params)
 end
 
 def set_id
-  data = parse_all_data
-  last_id = if data.empty?
+  all_data = parse_all_all_data
+  last_id = if all_data.empty?
               0
             else
-              data[-1][:id]
+              all_data[-1][:id]
             end
   last_id + 1
 end
 
 def add_new_memo(params)
-  symbolize_params = params.transform_keys(&:to_sym)
+  symbolized_params = params.transform_keys(&:to_sym)
   id = set_id
-  data = parse_all_data
-  data.push({ name: symbolize_params[:name], text: symbolize_params[:text], id: })
-  new_data = { memos: data }
+  all_data = parse_all_data
+  all_data.push({ name: symbolized_params[:name], text: symbolized_params[:text], id: })
+  new_data = { memos: all_data }
   File.open('db.json', 'w') do |file|
     file.puts(JSON.pretty_generate(new_data))
   end
