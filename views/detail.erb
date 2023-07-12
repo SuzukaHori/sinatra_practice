@@ -1,12 +1,12 @@
 <section>
-  <h3>メモ<%= @id %></h3>
-  <p>メモ名： <%= CGI.escapeHTML(@name) %></p>
-  <p>メモの内容： <%= CGI.escapeHTML(@text) %></p>
+  <h3>メモ<%= @memo[:id] %></h3>
+  <p>メモ名： <%= CGI.escapeHTML(@memo[:name]) %></p>
+  <p>メモの内容： <%= CGI.escapeHTML(@memo[:text]) %></p>
 </section>
 
 <div class="button wrapper">
-  <a href='/memos/<%= @id %>/edit' class="button">変更 </a>
-  <form method="post" action="/memos/<%= @id %>">
+  <a href='/memos/<%= @memo[:id] %>/edit' class="button">変更 </a>
+  <form method="post" action="/memos/<%= @memo[:id] %>">
     <input type="submit" value="削除" class="button">
     <input type="hidden" name="_method" value="delete">
   </form>

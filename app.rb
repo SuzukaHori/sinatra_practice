@@ -26,19 +26,13 @@ end
 
 get '/memos/:id/edit' do
   @title = 'edit'
-  found_data = find_memo_data(params[:id].to_i)
-  @id = found_data[:id]
-  @name = found_data[:name]
-  @text = found_data[:text]
+  @memo = find_memo_data(params[:id].to_i)
   erb :edit
 end
 
 get '/memos/:id' do
-  found_data = find_memo_data(params[:id].to_i)
   @title = 'detail'
-  @id = found_data[:id]
-  @name = found_data[:name]
-  @text = found_data[:text]
+  @memo = find_memo_data(params[:id].to_i)
   erb :detail
 end
 
