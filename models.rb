@@ -5,7 +5,7 @@ require 'json'
 def parse_all_data
   original_data = File.read('db.json')
   data = JSON.parse(original_data, symbolize_names: true)
-  data[:memos] || []
+  data || []
 end
 
 def find_memo_data(id)
@@ -15,7 +15,7 @@ end
 
 def delete_memo_data(id)
   old_data = parse_all_data
-  new_data = { 'memos' => old_data.reject { |memo| memo[:id] == id } }
+  new_data = old_data.reject { |memo| memo[:id] == id }
   File.open('db.json', 'w') do |file|
     file.write(JSON.pretty_generate(new_data))
   end
@@ -24,14 +24,10 @@ end
 def edit_memo_data(params)
   symbolized_params = params.transform_keys(&:to_sym)
   all_data = parse_all_data
-  all_data.each do |memo|
-    if memo[:id] == symbolized_params[:id].to_i
-      memo[:name] = symbolized_params[:name]
-      memo[:text] = symbolized_params[:text]
-    end
-  end
-  new_data = { memos: all_data }
-  File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(new_data)) }
+  memo = all_data.find { |memo| memo[:id] == symbolized_params[:id].to_i }
+  memo[:name] = symbolized_params[:name]
+  memo[:text] = symbolized_params[:text]
+  File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(all_data)) }
 end
 
 def set_id
@@ -45,8 +41,7 @@ def add_new_memo(params)
   id = set_id
   all_data = parse_all_data
   all_data.push(symbolized_params.slice(:name, :text).merge(id:))
-  new_data = { memos: all_data }
   File.open('db.json', 'w') do |file|
-    file.puts(JSON.pretty_generate(new_data))
+    file.puts(JSON.pretty_generate(all_data))
   end
 end
