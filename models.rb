@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'cgi'
 
 def parse_all_data
   original_data = File.read('db.json')
