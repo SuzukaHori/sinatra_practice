@@ -49,3 +49,9 @@ end
 not_found do
   'This is nowhere to be found.'
 end
+
+helpers do
+  def escape(text)
+    Rack::Utils.escape_html(text)
+  end
+end
