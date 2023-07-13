@@ -10,7 +10,7 @@ end
 
 get '/memos' do
   @title = 'memos'
-  @memos = read_memos
+  @memos = read_all_memos
   erb :index
 end
 
