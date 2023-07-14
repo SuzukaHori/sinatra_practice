@@ -24,7 +24,7 @@ end
 def edit_memo(params)
   symbolized_params = params.transform_keys(&:to_sym)
   memos = read_all_memos
-  memo = memos.find { |memo| memo[:id] == symbolized_params[:id].to_i }
+  memo = memos.find { |x| x[:id] == symbolized_params[:id].to_i }
   memo[:name] = symbolized_params[:name]
   memo[:text] = symbolized_params[:text]
   File.open('db.json', 'w') { |file| file.write(JSON.pretty_generate(memos)) }
