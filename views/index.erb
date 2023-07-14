@@ -1,7 +1,7 @@
 <ul>
   <% @memos.each do |memo| %>
   <li>
-    <a href="/memos/<%= memo[:id] %>">メモ<%= memo[:id] %>：<%= escape(memo[:name]) %></a>
+    <a href="/memos/<%= memo[:id] %>">メモ<%= memo[:id] %>：<%= escape_html(memo[:name]) %></a>
   </li>
   <% end %>
 </ul>

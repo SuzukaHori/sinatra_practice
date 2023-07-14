@@ -1,7 +1,7 @@
 <section>
   <h3>メモ<%= @memo[:id] %></h3>
-  <p>メモ名： <%= escape(@memo[:name]) %></p>
-  <p>メモの内容： <%= escape(@memo[:text]) %></p>
+  <p>メモ名： <%= escape_html(@memo[:name]) %></p>
+  <p>メモの内容： <%= escape_html(@memo[:text]) %></p>
 </section>
 
 <div class="button wrapper">
