@@ -4,8 +4,7 @@ require 'json'
 
 def read_all_memos
   original_data = File.read('db.json')
-  memos = JSON.parse(original_data, symbolize_names: true)
-  memos || []
+  JSON.parse(original_data, symbolize_names: true)
 end
 
 def find_memo(id)
