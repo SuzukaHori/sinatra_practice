@@ -5,7 +5,7 @@
 </section>
 
 <div class="button wrapper">
-  <a href='/memos/<%= @memo[:id] %>/edit' class="button">変更 </a>
+  <a href="/memos/<%= @memo[:id] %>/edit" class="button">変更</a>
   <form method="post" action="/memos/<%= @memo[:id] %>">
     <input type="submit" value="削除" class="button">
     <input type="hidden" name="_method" value="delete">
