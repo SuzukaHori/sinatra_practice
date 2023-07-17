@@ -2,7 +2,7 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
-require_relative 'models'
+require_relative 'db'
 
 get '/' do
   redirect '/memos'
