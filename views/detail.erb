@@ -1,0 +1,13 @@
+<section>
+  <h3>メモ<%= @memo[:id] %></h3>
+  <p>メモ名： <%= escape_html(@memo[:name]) %></p>
+  <p>メモの内容： <%= escape_html(@memo[:text]) %></p>
+</section>
+
+<div class="button wrapper">
+  <a href="/memos/<%= @memo[:id] %>/edit" class="button">変更</a>
+  <form method="post" action="/memos/<%= @memo[:id] %>">
+    <input type="submit" value="削除" class="button">
+    <input type="hidden" name="_method" value="delete">
+  </form>
+</div>
