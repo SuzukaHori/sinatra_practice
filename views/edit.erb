@@ -1,9 +1,9 @@
 <h3>メモ<%= @memo[:id] %></h3>
 <form method="post" action="/memos/<%= @memo[:id] %>">
   <label for="name">メモ名 </label><br>
-  <input type="text" name="name" value="<%= escape_html(@memo[:name]) %>" class="name_form" id="name"><br>
+  <input type="text" name="name" maxlength="30" value="<%= escape_html(@memo[:name]) %>" class="name_form" id="name"><br>
   <label for="text">内容</label><br>
-  <textarea name="text" class="text_form" id="text"><%= escape_html(@memo[:text]) %></textarea><br>
+  <textarea name="text" class="text_form" id="text" maxlength="150"><%= escape_html(@memo[:text]) %></textarea><br>
   <input type="submit" class="button change" value="変更">
   <input type="hidden" name="_method" value="patch">
 </form>
