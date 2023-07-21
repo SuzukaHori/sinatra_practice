@@ -10,14 +10,12 @@ def connect_database
 end
 
 def execute_sql(params, sql)
-  if params[:name]
-    name = params[:name]
-    text = params[:text]
-  end
+  name = params[:name] || nil
+  text = params[:text] || nil
   id = params[:id]
-  value_to_replace_bind_variable = [name, text, id].compact
+  values_to_bind = [name, text, id].compact
   connection = connect_database
-  connection.exec_params(sql, value_to_replace_bind_variable)
+  connection.exec_params(sql, values_to_bind)
 end
 
 def read_all_memos
@@ -39,11 +37,9 @@ def delete_memo(id)
     DELETE FROM memos
     WHERE id = $1;
   SQL
-  params = { id: id }
+  params = { id: }
   execute_sql(params, sql)
 end
-
-delete_memo(16)
 
 def edit_memo(params)
   sql = <<~SQL
