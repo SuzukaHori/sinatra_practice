@@ -3,19 +3,19 @@
 require 'json'
 require 'pg'
 
-DBNAME = 'memosdata'
+DB_NAME = 'memosdata'
 
 def connect_database
-  PG.connect(dbname: DBNAME)
+  PG.connect(dbname: DB_NAME)
 end
 
-def execute_sql(params, sql)
+def execute_sql_to_write_memos(params, sql)
   name = params[:name] || nil
   text = params[:text] || nil
   id = params[:id]
-  values_to_bind = [name, text, id].compact
+  bind_variables = [name, text, id].compact
   connection = connect_database
-  connection.exec_params(sql, values_to_bind)
+  connection.exec_params(sql, bind_variables)
 end
 
 def read_all_memos
@@ -28,7 +28,7 @@ def read_all_memos
 end
 
 def find_memo(id)
-  memos = read_all_memos
+  memos = read_all_memos#TODO:一つだけ読み込むよう修正
   memos.find { |memo| memo[:id] == id }
 end
 
@@ -38,7 +38,7 @@ def delete_memo(id)
     WHERE id = $1;
   SQL
   params = { id: }
-  execute_sql(params, sql)
+  execute_sql_to_write_memos(params, sql)
 end
 
 def edit_memo(params)
@@ -48,7 +48,7 @@ def edit_memo(params)
     WHERE id =  $3::int;
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
-  execute_sql(symbolized_params, sql)
+  execute_sql_to_write_memos(symbolized_params, sql)
 end
 
 def add_memo(params)
@@ -57,5 +57,5 @@ def add_memo(params)
     VALUES ($1::VARCHAR, $2::VARCHAR);
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
-  execute_sql(symbolized_params, sql)
+  execute_sql_to_write_memos(symbolized_params, sql)
 end
