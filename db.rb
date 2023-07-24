@@ -28,8 +28,9 @@ def read_all_memos
 end
 
 def find_memo(id)
-  memos = read_all_memos#TODO:一つだけ読み込むよう修正
-  memos.find { |memo| memo[:id] == id }
+  connection = connect_database
+  memos = connection.exec_params('SEKECT * FROM memos WHERE id = $1;', [id])
+  memos[0].transform_keys(&:to_sym)
 end
 
 def delete_memo(id)
