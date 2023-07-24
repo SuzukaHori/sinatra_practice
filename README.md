@@ -7,8 +7,8 @@ FBC の Sinatra の課題で作成したメモアプリです。
   - macの場合：`brew services start postgresql`
   - windowsの場合：`net start postgresql-x64-[PostgreSQLのバージョン]`
   - Linuxの場合：`service postgresql start`
-1. `psql -U [ユーザ名もしくはpostgres`]で、任意のデータベースに接続してください。
-1. `CREATE DATABASE memosdata`を実行し、データベースを作成してください。
+1. `psql -U [ユーザ名もしくはpostgres]`で、任意のデータベースに接続してください。
+1. `CREATE DATABASE memosdata;`を実行し、データベースを作成してください。
 1. `\q`でデータベースからターミナルに戻ってください。
 1. `psql memosdata < dbinit.sql`でSQL文を実行し、テーブル・カラムを作成します。
 

@@ -29,7 +29,7 @@ end
 
 def find_memo(id)
   connection = connect_database
-  memos = connection.exec_params('SEKECT * FROM memos WHERE id = $1;', [id])
+  memos = connection.exec_params('SELECT * FROM memos WHERE id = $1;', [id])
   memos[0].transform_keys(&:to_sym)
 end
 
