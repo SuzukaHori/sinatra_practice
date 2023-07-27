@@ -18,10 +18,7 @@ def read_all_memos
   SQL
   all_memos = connection.exec(sql)
   connection.close
-  all_memos.map do |memo|
-    memo.store('id', memo['id'].to_i)
-    memo.transform_keys(&:to_sym)
-  end
+  all_memos.map { |memo| memo.transform_keys(&:to_sym) }
 end
 
 def find_memo(id)
@@ -49,7 +46,7 @@ def edit_memo(params)
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
   connection = connect_database
-  connection.exec_params(sql, [params[:name], params[:text], params[:id]])
+  connection.exec_params(sql, [symbolized_params[:name], symbolized_params[:text], symbolized_params[:id]])
   connection.close
 end
 
@@ -60,6 +57,6 @@ def add_memo(params)
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
   connection = connect_database
-  connection.exec_params(sql, [params[:name], params[:text]])
+  connection.exec_params(sql, [symbolized_params[:name], symbolized_params[:text]])
   connection.close
 end
