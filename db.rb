@@ -11,7 +11,12 @@ end
 
 def read_all_memos
   connection = connect_database
-  all_memos = connection.exec('SELECT * FROM memos;')
+  sql = <<~SQL
+    SELECT *
+    FROM memos 
+    ORDER BY id;
+  SQL
+  all_memos = connection.exec(sql)
   all_memos.map do |memo|
     memo.store('id', memo['id'].to_i)
     memo.transform_keys(&:to_sym)
