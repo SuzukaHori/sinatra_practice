@@ -9,15 +9,6 @@ def connect_database
   PG.connect(dbname: DB_NAME)
 end
 
-def execute_sql_to_write_memos(params, sql)
-  name = params[:name] || nil
-  text = params[:text] || nil
-  id = params[:id]
-  bind_variables = [name, text, id].compact
-  connection = connect_database
-  connection.exec_params(sql, bind_variables)
-end
-
 def read_all_memos
   connection = connect_database
   all_memos = connection.exec('SELECT * FROM memos;')
@@ -38,8 +29,8 @@ def delete_memo(id)
     DELETE FROM memos
     WHERE id = $1;
   SQL
-  params = { id: }
-  execute_sql_to_write_memos(params, sql)
+  connection = connect_database
+  connection.exec_params(sql, [id])
 end
 
 def edit_memo(params)
@@ -49,7 +40,8 @@ def edit_memo(params)
     WHERE id =  $3::int;
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
-  execute_sql_to_write_memos(symbolized_params, sql)
+  connection = connect_database
+  connection.exec_params(sql, [params[:name], params[:text], params[:id]])
 end
 
 def add_memo(params)
@@ -58,5 +50,6 @@ def add_memo(params)
     VALUES ($1::VARCHAR, $2::VARCHAR);
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
-  execute_sql_to_write_memos(symbolized_params, sql)
+  connection = connect_database
+  connection.exec_params(sql, [params[:name], params[:text]])
 end
