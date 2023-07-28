@@ -13,7 +13,7 @@ def read_all_memos
   connection = connect_database
   sql = <<~SQL
     SELECT *
-    FROM memos 
+    FROM memos
     ORDER BY id;
   SQL
   all_memos = connection.exec(sql)
