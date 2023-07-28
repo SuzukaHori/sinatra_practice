@@ -26,18 +26,18 @@ end
 
 get '/memos/:id/edit' do
   @title = 'edit'
-  @memo = find_memo(params[:id].to_i)
+  @memo = find_memo(params[:id])
   erb :edit
 end
 
 get '/memos/:id' do
   @title = 'detail'
-  @memo = find_memo(params[:id].to_i)
+  @memo = find_memo(params[:id])
   erb :detail
 end
 
 delete '/memos/:id' do
-  delete_memo(params[:id].to_i)
+  delete_memo(params[:id])
   redirect '/memos'
 end
 
