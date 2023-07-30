@@ -5,26 +5,23 @@ require 'pg'
 
 DB_NAME = 'memosdata'
 
-def connect_database
-  PG.connect(dbname: DB_NAME)
-end
-
 def read_all_memos
-  connection = connect_database
   sql = <<~SQL
     SELECT *
     FROM memos
     ORDER BY id;
   SQL
-  all_memos = connection.exec(sql)
-  connection.close
+  all_memos = PG.connect(dbname: DB_NAME) { |connection| connection.exec(sql) }
   all_memos.map { |memo| memo.transform_keys(&:to_sym) }
 end
 
 def find_memo(id)
-  connection = connect_database
-  memos = connection.exec_params('SELECT * FROM memos WHERE id = $1;', [id])
-  connection.close
+  sql = <<~SQL
+    SELECT *#{' '}
+    FROM memos#{' '}
+    WHERE id = $1;
+  SQL
+  memos = PG.connect(dbname: DB_NAME) { |connection| connection.exec_params(sql, [id]) }
   memos[0].transform_keys(&:to_sym)
 end
 
@@ -33,9 +30,7 @@ def delete_memo(id)
     DELETE FROM memos
     WHERE id = $1;
   SQL
-  connection = connect_database
-  connection.exec_params(sql, [id])
-  connection.close
+  PG.connect(dbname: DB_NAME) { |connection| connection.exec_params(sql, [id]) }
 end
 
 def edit_memo(params)
@@ -45,9 +40,10 @@ def edit_memo(params)
     WHERE id =  $3::int;
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
-  connection = connect_database
-  connection.exec_params(sql, [symbolized_params[:name], symbolized_params[:text], symbolized_params[:id]])
-  connection.close
+  name = symbolized_params[:name]
+  text = symbolized_params[:text]
+  id = symbolized_params[:id]
+  PG.connect(dbname: DB_NAME) { |connection| connection.exec_params(sql, [name, text, id]) }
 end
 
 def add_memo(params)
@@ -56,7 +52,7 @@ def add_memo(params)
     VALUES ($1::VARCHAR, $2::VARCHAR);
   SQL
   symbolized_params = params.transform_keys(&:to_sym)
-  connection = connect_database
-  connection.exec_params(sql, [symbolized_params[:name], symbolized_params[:text]])
-  connection.close
+  name = symbolized_params[:name]
+  text = symbolized_params[:text]
+  PG.connect(dbname: DB_NAME) { |connection| connection.exec_params(sql, [name, text]) }
 end
