@@ -17,8 +17,8 @@ end
 
 def find_memo(id)
   sql = <<~SQL
-    SELECT *#{' '}
-    FROM memos#{' '}
+    SELECT *
+    FROM memos
     WHERE id = $1;
   SQL
   memos = PG.connect(dbname: DB_NAME) { |connection| connection.exec_params(sql, [id]) }
