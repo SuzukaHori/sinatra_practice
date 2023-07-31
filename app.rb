@@ -4,13 +4,15 @@ require 'sinatra'
 require 'sinatra/reloader'
 require_relative 'db'
 
+connection = PG.connect(dbname: DB_NAME)
+
 get '/' do
   redirect '/memos'
 end
 
 get '/memos' do
   @title = 'memos'
-  @memos = read_all_memos
+  @memos = read_all_memos(connection)
   erb :index
 end
 
@@ -20,29 +22,29 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  add_memo(params)
+  add_memo(params, connection)
   redirect '/memos'
 end
 
 get '/memos/:id/edit' do
   @title = 'edit'
-  @memo = find_memo(params[:id])
+  @memo = find_memo(params[:id], connection)
   erb :edit
 end
 
 get '/memos/:id' do
   @title = 'detail'
-  @memo = find_memo(params[:id])
+  @memo = find_memo(params[:id], connection)
   erb :detail
 end
 
 delete '/memos/:id' do
-  delete_memo(params[:id])
+  delete_memo(params[:id], connection)
   redirect '/memos'
 end
 
 patch '/memos/:id' do
-  edit_memo(params)
+  edit_memo(params, connection)
   redirect '/memos'
 end
 
