@@ -6,7 +6,7 @@ require 'pg'
 DB_NAME = 'memosdata'
 
 def connect_database
-  @connection = PG.connect(dbname: DB_NAME)
+  PG.connect(dbname: DB_NAME)
 end
 
 def read_all_memos

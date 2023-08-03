@@ -4,8 +4,12 @@ require 'sinatra'
 require 'sinatra/reloader'
 require_relative 'db'
 
+configure do
+  set :connection, connect_database
+end
+
 before do
-  connect_database
+  @connection = settings.connection
 end
 
 get '/' do
